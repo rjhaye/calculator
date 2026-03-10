@@ -7,106 +7,71 @@ body {
   padding: 0px;
 }
 
-.parent-container {
+.calc {
+  width: 400px;
+  background-color: black;
+  color: white;
   position: absolute;
-  left: 50%;
   top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
 }
 
 .screen {
-  height: 50px;
-  color: #ffffff;
-  background-color: #000000;
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  padding: 10px;
-  font-family: monospace;
+  color: white;
+  font-size: 40px;
+  font-family: "Courier New", Courier, monospace;
+  text-align: right;
+  padding: 20px 5px;
 }
 
-button {
-  padding: 20px;
+.calc-button {
+  background-color: #d8d9db;
+  color: black;
+  height: 100px;
+  width: 24.5%;
+  border: none;
+  border-radius: 0;
+  font-size: 40px;
+  cursor: pointer;
 }
 
-.accent {
+.calc-button:hover {
+  background-color: #ebebeb;
+}
+
+.calc-button:active {
+  background-color: #bbbcbe;
+}
+
+.double {
+  width: 49.7%;
+}
+
+.triple {
+  width: 74.8%;
+}
+
+.calc-button:last-child {
   background-color: #df974c;
+  color: white;
 }
 
-.clear {
-  grid-area: clear;
+.calc-button:last-child:hover {
+  background-color: #dfb07e;
 }
 
-.delete {
-  grid-area: delete;
+.calc-button:last-child:active {
+  background-color: #dd8d37;
 }
 
-.zero {
-  grid-area: zero;
+.calc-button-row {
+  display: flex;
+  align-content: stretch;
+  justify-content: space-between;
+  margin-bottom: 0.5%;
 }
 
-.one {
-  grid-area: one;
-}
-
-.two {
-  grid-area: two;
-}
-
-.three {
-  grid-area: three;
-}
-
-.four {
-  grid-area: four;
-}
-
-.five {
-  grid-area: five;
-}
-
-.six {
-  grid-area: six;
-}
-
-.seven {
-  grid-area: seven;
-}
-
-.eight {
-  grid-area: eight;
-}
-
-.nine {
-  grid-area: nine;
-}
-
-.divide {
-  grid-area: divide;
-}
-
-.multiply {
-  grid-area: multiply;
-}
-
-.add {
-  grid-area: add;
-}
-
-.subtract {
-  grid-area: subtract;
-}
-
-.equal {
-  grid-area: equal
-}
-
-.buttons-container {
-  display: grid;
-  grid-template-areas:
-    "clear clear delete divide"
-    "seven eight nine   multiply"
-    "four  five  six    subtract"
-    "one   two   three  add"
-    "zero  zero  zero   equal";
+.calc-button-row:last-child {
+  padding-bottom: 0;
 }
