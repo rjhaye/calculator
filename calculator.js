@@ -1,83 +1,97 @@
-const buttons = document.querySelector(".calc-buttons");
+let runningTotal = 0;
+let buffer = "0";
+let previousOperator;
 const screen = document.querySelector(".screen");
-let currentVal = 0;
-let result = 0;
-let number = 0;
-let operation = "";
 
-buttons.addEventListener("click", function (event) {
-  if (!isNaN(event.target.innerText)) {
-    if (screen.innerText === "0") {
-      screen.innerText = event.target.innerText;
-    } else {
-      screen.innerText += event.target.innerText;
-    }
-    if (operation === "") {
-      currentVal = Number.parseInt(screen.innerText);
-    } else {
-      number = Number.parseInt(screen.innerText);
-    }
+function buttonClick(value) {
+  if (isNaN(parseInt(value))) {
+    handleSymbol(value);
   } else {
-    switch (event.target.innerText) {
-      case "C":
-        clearScreen();
-        break;
-      case "←":
-        del();
-        break;
-      case "÷":
-        clearScreen();
-        operation = "division";
-        break;
-      case "×":
-        clearScreen();
-        operation = "multiplication";
-        break;
-      case "+":
-        clearScreen();
-        operation = "addition";
-        break;
-      case "-":
-        clearScreen();
-        operation = "subtraction";
-        break;
-      case "=":
-        showResult();
-    }
+    handleNumber(value);
   }
-});
-
-function clearScreen() {
-  screen.innerText = 0;
-  operation = "";
+  rerender();
 }
 
-function del() {
-  const stringVal = currentVal.toString();
-  if (stringVal.length > 1) {
-    screen.innerText = stringVal.substring(0, stringVal.length - 1);
-    currentVal = Number.parseInt(screen.innerText);
+function handleNumber(value) {
+  if (buffer === "0") {
+    buffer = value;
   } else {
-    currentVal = 0;
-    screen.innerText = 0;
+    buffer += value;
   }
 }
 
-function showResult() {
-  switch (operation) {
-    case "division":
-      result = currentVal / number;
+function handleMath(value) {
+  if (buffer === "0") {
+    // do nothing
+    return;
+  }
+
+  const intBuffer = parseInt(buffer);
+  if (runningTotal === 0) {
+    runningTotal = intBuffer;
+  } else {
+    flushOperation(intBuffer);
+  }
+
+  previousOperator = value;
+
+  buffer = "0";
+}
+
+function flushOperation(intBuffer) {
+  if (previousOperator === "+") {
+    runningTotal += intBuffer;
+  } else if (previousOperator === "-") {
+    runningTotal -= intBuffer;
+  } else if (previousOperator === "×") {
+    runningTotal *= intBuffer;
+  } else {
+    runningTotal /= intBuffer;
+  }
+}
+
+function handleSymbol(value) {
+  switch (value) {
+    case "C":
+      buffer = "0";
+      runningTotal = 0;
       break;
-    case "multiplication":
-      result = currentVal * number;
+    case "=":
+      if (previousOperator === null) {
+        // need two numbers to do math
+        return;
+      }
+      flushOperation(parseInt(buffer));
+      previousOperator = null;
+      buffer = +runningTotal;
+      runningTotal = 0;
       break;
-    case "addition":
-      result = currentVal + number;
+    case "←":
+      if (buffer.length === 1) {
+        buffer = "0";
+      } else {
+        buffer = buffer.substring(0, buffer.length - 1);
+      }
       break;
-    case "subtraction":
-      result = currentVal - number;
+    case "+":
+    case "-":
+    case "×":
+    case "÷":
+      handleMath(value);
       break;
   }
-  screen.innerText = result;
-  currentVal = result;
 }
+
+function rerender() {
+  screen.innerText = buffer;
+}
+
+function init() {
+  document
+    .querySelector(".calc-buttons")
+    .addEventListener("click", function (event) {
+      buttonClick(event.target.innerText);
+    });
+}
+
+init();
